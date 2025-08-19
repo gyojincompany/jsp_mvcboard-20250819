@@ -1,5 +1,15 @@
+<%@page import="com.gyojincompany.dto.BoardDto"%>
+<%@page import="java.util.List"%>
+<%@page import="com.gyojincompany.dao.BoardDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>   
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %> 
+<%
+	BoardDao bDao = new BoardDao();
+	List<BoardDto> bDtos = bDao.boardList();	
+	request.setAttribute("bDtos", bDtos);
+%>    
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -26,27 +36,24 @@
         </tr>
       </thead>
       <tbody>
+        <c:forEach items="${bDtos}" var="bDto">
         <tr>
-          <td>1</td>
-          <td><a href="#">추석 연휴 진료 시간 안내</a></td>
-          <td>관리자</td>
-          <td>2025-08-10</td>
-          <td>135</td>
+          <td>${bDto.bnum }</td>
+          <td>
+          <c:choose>
+          	<c:when test="${fn:length(bDto.btitle) > 35}">
+          		<a href="#">${fn:substring(bDto.btitle, 0, 35)}...</a>
+          	</c:when>
+          	<c:otherwise>
+          		<a href="#">${bDto.btitle}</a>
+          	</c:otherwise>
+          </c:choose>
+          </td>
+          <td>${bDto.memberid }</td>
+          <td>${fn:substring(bDto.bdate,0,10)}</td>
+          <td>${bDto.bhit }</td>
         </tr>
-        <tr>
-          <td>2</td>
-          <td><a href="#">독감 예방접종 시작 안내</a></td>
-          <td>관리자</td>
-          <td>2025-08-05</td>
-          <td>289</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td><a href="#">건강기능식품 할인 행사</a></td>
-          <td>관리자</td>
-          <td>2025-07-28</td>
-          <td>97</td>
-        </tr>
+        </c:forEach>
         <!-- 추가 게시글 -->
       </tbody>
     </table>

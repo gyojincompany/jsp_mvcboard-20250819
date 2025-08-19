@@ -21,7 +21,7 @@ public class BoardDao {
 	ResultSet rs = null;
 	
 	public List<BoardDto> boardList() { //게시판 모든 글 리스트를 가져와서 반환하는 메서드
-		String sql = "SELECT * FROM board";
+		String sql = "SELECT * FROM board ORDER BY bnum DESC";
 		List<BoardDto> bDtos = new ArrayList<BoardDto>();
 		
 		try {
