@@ -33,8 +33,8 @@
     
     <div class="post-buttons">
       <a href="index.html" class="btn btn-secondary">목록으로</a>
-      <a href="#" class="btn btn-primary">수정</a>
-      <a href="#" class="btn btn-danger">삭제</a>
+      <a href="modify.do" class="btn btn-primary">수정</a>
+      <a href="delete.do" class="btn btn-danger">삭제</a>
     </div>
   </div>
 </body>

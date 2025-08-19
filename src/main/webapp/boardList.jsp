@@ -1,15 +1,9 @@
-<%@page import="com.gyojincompany.dto.BoardDto"%>
-<%@page import="java.util.List"%>
-<%@page import="com.gyojincompany.dao.BoardDao"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>   
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %> 
-<%
-	BoardDao bDao = new BoardDao();
-	List<BoardDto> bDtos = bDao.boardList();	
-	request.setAttribute("bDtos", bDtos);
-%>    
+  
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -22,7 +16,7 @@
   <div class="board-container">
     <div class="board-header">
       <h2>자유게시판</h2>
-      <a href="#" class="write-button">글쓰기</a>
+      <a href="write.do" class="write-button">글쓰기</a>
     </div>
     
     <table class="board-table">

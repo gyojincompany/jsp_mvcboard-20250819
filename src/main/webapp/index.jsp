@@ -16,7 +16,7 @@
         <a href="#">홈</a>
         <a href="#">약품안내</a>
         <a href="#">건강정보</a>
-        <a href="#">자유게시판</a>
+        <a href="list.do">자유게시판</a>
         <a href="#">문의하기</a>
       </nav>
     </div>
