@@ -55,6 +55,15 @@ public class BoardController extends HttpServlet {
 			viewPage = "list.do";
 		} else if(comm.equals("/content.do")) { //글 목록에서 선택된 글 내용이 보여지는 페이지로 이동
 			viewPage = "contentView.jsp";
+		} else if(comm.equals("/writeOk.do")) {
+			request.setCharacterEncoding("utf-8");
+			
+			String btitle = request.getParameter("title"); //유저가 입력한 글 제목
+			String memberid = request.getParameter("author"); //유저가 입력한 글 작성자
+			String bcontent = request.getParameter("content"); //유저가 입력한 글 내용
+			
+			boardDao.boardWrite(btitle, bcontent, memberid); //새 글이 DB 입력			
+			viewPage = "list.do";
 		}
 		
 		

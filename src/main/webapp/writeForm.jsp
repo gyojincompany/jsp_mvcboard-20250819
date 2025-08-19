@@ -12,7 +12,7 @@
   <div class="board-container">
     <h2>새 글쓰기</h2>
 
-    <form action="#" method="post" class="edit-form">
+    <form action="writeOk.do" method="post" class="edit-form">
       <div class="form-group">
         <label for="title">제목</label>
         <input type="text" id="title" name="title" placeholder="제목을 입력하세요" required />
