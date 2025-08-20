@@ -38,7 +38,7 @@
       <tbody>
         <c:forEach items="${bDtos}" var="bDto">
         <tr>
-          <td>${bDto.bnum }</td> <!-- 글 번호 -->
+          <td>${bDto.bno }</td> <!-- 글 번호 -->
           <td> <!-- 글 제목 -->
           <c:choose>
           	<c:when test="${fn:length(bDto.btitle) > 35}">
