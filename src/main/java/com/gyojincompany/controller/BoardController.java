@@ -72,9 +72,11 @@ public class BoardController extends HttpServlet {
 			String bcontent = request.getParameter("content"); //유저가 입력한 글 내용
 			
 			boardDao.boardWrite(btitle, bcontent, memberid); //새 글이 DB 입력
-			
-			viewPage = "list.do";
-		} 
+			response.sendRedirect("list.do"); //포워딩을 하지 않고 강제로 list.do로 이동
+			return; //프로그램의 진행 멈춤
+		} else {
+			viewPage = "index.jsp";
+		}
 		
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);		
