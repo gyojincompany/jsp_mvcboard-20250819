@@ -93,8 +93,5 @@ public class BoardDto {
 	public void setMemberDto(MemberDto memberDto) {
 		this.memberDto = memberDto;
 	}
-	
-	
-	
 
 }

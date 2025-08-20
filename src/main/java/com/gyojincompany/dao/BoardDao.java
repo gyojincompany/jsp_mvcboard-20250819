@@ -225,7 +225,38 @@ public class BoardDao {
 				e.printStackTrace();
 			}
 		}
-	}
+			
+		}
 	
+	public void updateBhit(String bnum) {
+		String sql = "UPDATE board SET bhit=bhit+1 WHERE bnum=?"; //조회수가 1씩 늘어나는 sql문
+		
+		try {
+			Class.forName(driverName); //MySQL 드라이버 클래스 불러오기			
+			conn = DriverManager.getConnection(url, username, password);
+			//커넥션이 메모리 생성(DB와 연결 커넥션 conn 생성)
+			
+			pstmt = conn.prepareStatement(sql); //pstmt 객체 생성(sql 삽입)			
+			pstmt.setString(1, bnum);			
+			
+			pstmt.executeUpdate(); //성공하면 sqlResult 값이 1로 변환
+			// SQL문을 DB에서 실행->성공하면 1이 반환, 실패면 1이 아닌 값 0이 반환
+			
+		} catch (Exception e) {
+			System.out.println("DB 에러 발생! 조회수 수정 실패!");
+			e.printStackTrace(); //에러 내용 출력
+		} finally { //에러의 발생여부와 상관 없이 Connection 닫기 실행 
+			try {
+				if(pstmt != null) { //stmt가 null 이 아니면 닫기(conn 닫기 보다 먼저 실행)
+					pstmt.close();
+				}				
+				if(conn != null) { //Connection이 null 이 아닐 때만 닫기
+					conn.close();
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
 }

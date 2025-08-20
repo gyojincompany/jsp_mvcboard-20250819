@@ -78,7 +78,6 @@ public class BoardController extends HttpServlet {
 				return;
 			}
 			
-			
 		} else if(comm.equals("/modifyOk.do")) { //글 수정한 후 글 내용 확인 페이지로 이동
 			request.setCharacterEncoding("utf-8");
 			
@@ -110,10 +109,11 @@ public class BoardController extends HttpServlet {
 				return;
 			}
 			
-			
-			
 		} else if(comm.equals("/content.do")) { //글 목록에서 선택된 글 내용이 보여지는 페이지로 이동
 			String bnum = request.getParameter("bnum"); //유저가 선택한 글의 번호
+			
+			//조회수 올려주는 메서드 호출
+			boardDao.updateBhit(bnum); //조회수 증가
 			
 			BoardDto boardDto = boardDao.contentView(bnum); //boardDto 반환(유저가 선택한 글번호에 해당하는 dto반환)
 			
