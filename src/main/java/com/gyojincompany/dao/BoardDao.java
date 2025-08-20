@@ -101,5 +101,50 @@ public class BoardDao {
 		}
 	}
 	
+	public BoardDto contentView(String boardnum) { //게시판 글 목록에서 유저가 클릭한 글 번호의 글 dto 반환 메서드
+		String sql = "SELECT * FROM board WHERE bnum=?";
+		BoardDto bDto = null;
+		
+		try {
+			Class.forName(driverName); //MySQL 드라이버 클래스 불러오기			
+			conn = DriverManager.getConnection(url, username, password);
+			//커넥션이 메모리 생성(DB와 연결 커넥션 conn 생성)
+			
+			pstmt = conn.prepareStatement(sql); //pstmt 객체 생성(sql 삽입)			
+			pstmt.setString(1, boardnum);			
+			rs = pstmt.executeQuery(); //해당 번호글의 레코드 1개 또는 0개가 반환
+			
+			while(rs.next()) {
+				int bnum = rs.getInt("bnum");
+				String btitle = rs.getString("btitle");
+				String bcontent = rs.getString("bcontent");
+				String memberid = rs.getString("memberid");
+				int bhit = rs.getInt("bhit");
+				String bdate = rs.getString("bdate");
+				
+				bDto = new BoardDto(bnum, btitle, bcontent, memberid, bhit, bdate);
+			}	
+			
+		} catch (Exception e) {
+			System.out.println("DB 에러 발생! 게시판 글 가져오기 실패!");
+			e.printStackTrace(); //에러 내용 출력
+		} finally { //에러의 발생여부와 상관 없이 Connection 닫기 실행 
+			try {
+				if(rs != null) { //rs가 null 이 아니면 닫기(pstmt 닫기 보다 먼저 실행)
+					rs.close();
+				}				
+				if(pstmt != null) { //stmt가 null 이 아니면 닫기(conn 닫기 보다 먼저 실행)
+					pstmt.close();
+				}				
+				if(conn != null) { //Connection이 null 이 아닐 때만 닫기
+					conn.close();
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return bDto;
+	}
+	
 
 }

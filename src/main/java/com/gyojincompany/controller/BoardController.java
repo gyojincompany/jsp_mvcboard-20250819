@@ -54,7 +54,16 @@ public class BoardController extends HttpServlet {
 		} else if(comm.equals("/delete.do")) { //글 삭제 후 글 목록으로 이동
 			viewPage = "list.do";
 		} else if(comm.equals("/content.do")) { //글 목록에서 선택된 글 내용이 보여지는 페이지로 이동
-			viewPage = "contentView.jsp";
+			String bnum = request.getParameter("bnum"); //유저가 선택한 글의 번호
+			
+			BoardDto boardDto = boardDao.contentView(bnum); //boardDto 반환(유저가 선택한 글번호에 해당하는 dto반환)
+			
+			if(boardDto == null) {
+				request.setAttribute("msg", 1);
+			}
+			request.setAttribute("boardDto", boardDto);
+						
+			viewPage = "contentView.jsp";			
 		} else if(comm.equals("/writeOk.do")) {
 			request.setCharacterEncoding("utf-8");
 			
@@ -62,9 +71,10 @@ public class BoardController extends HttpServlet {
 			String memberid = request.getParameter("author"); //유저가 입력한 글 작성자
 			String bcontent = request.getParameter("content"); //유저가 입력한 글 내용
 			
-			boardDao.boardWrite(btitle, bcontent, memberid); //새 글이 DB 입력			
+			boardDao.boardWrite(btitle, bcontent, memberid); //새 글이 DB 입력
+			
 			viewPage = "list.do";
-		}
+		} 
 		
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);		

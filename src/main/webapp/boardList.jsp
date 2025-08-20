@@ -36,10 +36,10 @@
           <td>
           <c:choose>
           	<c:when test="${fn:length(bDto.btitle) > 35}">
-          		<a href="#">${fn:substring(bDto.btitle, 0, 35)}...</a>
+          		<a href="content.do?bnum=${bDto.bnum }">${fn:substring(bDto.btitle, 0, 35)}...</a>
           	</c:when>
           	<c:otherwise>
-          		<a href="#">${bDto.btitle}</a>
+          		<a href="content.do?bnum=${bDto.bnum }">${bDto.btitle}</a>
           	</c:otherwise>
           </c:choose>
           </td>
