@@ -24,7 +24,7 @@ public class BoardDao {
 	
 	public List<BoardDto> boardList() { //게시판 모든 글 리스트를 가져와서 반환하는 메서드
 		//String sql = "SELECT * FROM board ORDER BY bnum DESC";
-		String sql = "SELECT row_number() OVER (order by bnum DESC) AS bno,"
+		String sql = "SELECT row_number() OVER (order by bnum ASC) AS bno,"
 				+ "b.bnum, b.btitle, b.bcontent, b.memberid, m.memberemail, b.bdate, b.bhit "
 				+ "FROM board b "
 				+ "INNER JOIN members m ON b.memberid = m.memberid"
