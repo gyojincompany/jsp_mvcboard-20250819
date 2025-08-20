@@ -30,6 +30,7 @@
           <th>번호</th>
           <th>제목</th>
           <th>작성자</th>
+          <th>이메일</th>
           <th>작성일</th>
           <th>조회수</th>
         </tr>
@@ -37,8 +38,8 @@
       <tbody>
         <c:forEach items="${bDtos}" var="bDto">
         <tr>
-          <td>${bDto.bnum }</td>
-          <td>
+          <td>${bDto.bnum }</td> <!-- 글 번호 -->
+          <td> <!-- 글 제목 -->
           <c:choose>
           	<c:when test="${fn:length(bDto.btitle) > 35}">
           		<a href="content.do?bnum=${bDto.bnum }">${fn:substring(bDto.btitle, 0, 35)}...</a>
@@ -48,9 +49,10 @@
           	</c:otherwise>
           </c:choose>
           </td>
-          <td>${bDto.memberid }</td>
-          <td>${fn:substring(bDto.bdate,0,10)}</td>
-          <td>${bDto.bhit }</td>
+          <td>${bDto.memberid }</td> <!-- 글 작성자 -->
+          <td>${bDto.memberDto.memberemail }</td> <!-- 작성자 이메일 -->
+          <td>${fn:substring(bDto.bdate,0,10)}</td> <!-- 글 등록일 -->
+          <td>${bDto.bhit }</td> <!-- 글 조회수 -->
         </tr>
         </c:forEach>
         <!-- 추가 게시글 -->

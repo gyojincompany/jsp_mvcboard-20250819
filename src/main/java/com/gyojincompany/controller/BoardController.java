@@ -15,6 +15,7 @@ import java.util.List;
 import com.gyojincompany.dao.BoardDao;
 import com.gyojincompany.dao.MemberDao;
 import com.gyojincompany.dto.BoardDto;
+import com.gyojincompany.dto.BoardMemberDto;
 
 @WebServlet("*.do")
 public class BoardController extends HttpServlet {
@@ -46,6 +47,7 @@ public class BoardController extends HttpServlet {
 		BoardDao boardDao = new BoardDao();
 		MemberDao memberDao = new MemberDao();
 		List<BoardDto> bDtos = new ArrayList<BoardDto>();
+		List<BoardMemberDto> bmDtos = new ArrayList<BoardMemberDto>();
 		HttpSession session = null;
 		
 		if(comm.equals("/list.do")) { //게시판 모든 글 목록 보기 요청
