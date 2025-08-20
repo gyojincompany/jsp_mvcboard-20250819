@@ -1,9 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
-	if(request.getAttribute("msg") != null) { //웹서블릿에서 넘겨준 값을 뺄때는 getAttribute 사용
-		String msginfo = request.getAttribute("msg").toString();		
-		out.println("<script>alert('" + msginfo + "');window.location.href='list.do';</script>");	
+	//if(request.getAttribute("msg") != null) { //웹서블릿에서 넘겨준 값을 뺄때는 getAttribute 사용
+	//	String msginfo = request.getAttribute("msg").toString();		
+	//	out.println("<script>alert('" + msginfo + "');window.location.href='list.do';</script>");	
+	//}
+	
+	if(request.getParameter("msg") != null) {
+		out.println("<script>alert('해당 글은 존재하지 않는 글입니다!');window.location.href='list.do';</script>");	
 	}
 %>    
 <!DOCTYPE html>
@@ -32,8 +36,8 @@
     
     <div class="post-buttons">
       <a href="list.do" class="btn btn-secondary">목록으로</a>
-      <a href="modify.do" class="btn btn-primary">수정</a>
-      <a href="delete.do" class="btn btn-danger">삭제</a>
+      <a href="modify.do?bnum=${boardDto.bnum }" class="btn btn-primary">수정</a>
+      <a href="delete.do?bnum=${boardDto.bnum }" class="btn btn-danger">삭제</a>
     </div>
   </div>
 </body>
