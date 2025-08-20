@@ -32,6 +32,11 @@
          			아이디 또는 비밀번호가 잘못 되었습니다.
          		</p>
          	</c:if>
+         	<c:if test="${param.msg == 2}">
+         		<p style="color:red;">
+         			로그인 한 유저만 글을 쓸 수 있습니다.
+         		</p>
+         	</c:if>
         </div>
         
       </form>

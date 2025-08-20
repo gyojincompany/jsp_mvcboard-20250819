@@ -46,13 +46,21 @@ public class BoardController extends HttpServlet {
 		BoardDao boardDao = new BoardDao();
 		MemberDao memberDao = new MemberDao();
 		List<BoardDto> bDtos = new ArrayList<BoardDto>();
+		HttpSession session = null;
 		
 		if(comm.equals("/list.do")) { //게시판 모든 글 목록 보기 요청
 			bDtos = boardDao.boardList(); //게시판 모든 글이 포함된 ArrayList 반환
 			request.setAttribute("bDtos", bDtos);
 			viewPage = "boardList.jsp";
 		} else if(comm.equals("/write.do")) { //글 쓰기 폼으로 이동
-			viewPage = "writeForm.jsp";
+			session = request.getSession();
+			String sid = (String) session.getAttribute("sessionId");
+			if(sid != null) { //로그인 한 상태
+				viewPage = "writeForm.jsp";
+			} else { //로그인 하지 않은 상태
+				response.sendRedirect("login.do?msg=2");
+				return; //멈춤
+			}			
 		} else if(comm.equals("/modify.do")) { //글 수정 폼으로 이동
 			String bnum = request.getParameter("bnum"); //수정하려고 하는 글의 글번호
 			BoardDto boardDto = boardDao.contentView(bnum); //수정하려고 하는 글 가져오기
@@ -114,7 +122,7 @@ public class BoardController extends HttpServlet {
 			int loginFlag = memberDao.loginCheck(loginId, loginPw); 
 			//로그인 성공이면 1, 실패면 0이 반환
 			if(loginFlag == 1) {
-				HttpSession session = request.getSession();
+				session = request.getSession();
 				session.setAttribute("sessionId", loginId);
 			} else {
 				response.sendRedirect("login.do?msg=1");
