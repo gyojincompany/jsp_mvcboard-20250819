@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%	
+<%
 	if(request.getAttribute("msg") != null) { //웹서블릿에서 넘겨준 값을 뺄때는 getAttribute 사용
-		out.println("<script>alert('존재하지 않는 글입니다!');window.location.href='list.do';</script>");	
+		String msginfo = request.getAttribute("msg").toString();		
+		out.println("<script>alert('" + msginfo + "');window.location.href='list.do';</script>");	
 	}
 %>    
 <!DOCTYPE html>

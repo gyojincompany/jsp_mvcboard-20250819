@@ -59,7 +59,7 @@ public class BoardController extends HttpServlet {
 			BoardDto boardDto = boardDao.contentView(bnum); //boardDto 반환(유저가 선택한 글번호에 해당하는 dto반환)
 			
 			if(boardDto == null) {
-				request.setAttribute("msg", 1);
+				request.setAttribute("msg", "존재하지 않는 글입니다.");
 			}
 			request.setAttribute("boardDto", boardDto);
 						
