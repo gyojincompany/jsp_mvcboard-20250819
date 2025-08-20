@@ -20,7 +20,7 @@
 
       <div class="form-group">
         <label for="author">작성자</label>
-        <input type="text" id="author" name="author" placeholder="작성자명을 입력하세요" required />
+        <input type="text" id="author" name="author" value="${sessionScope.sessionId }" readonly />
       </div>
 
       <div class="form-group">
