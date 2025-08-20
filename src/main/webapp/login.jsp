@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>    
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -12,7 +13,7 @@
   <div class="login-container">
     <div class="login-box">
       <h2>💊 약국 회원 로그인</h2>
-      <form action="#" method="POST">
+      <form action="loginOk.do" method="POST">
         <label for="username">아이디</label>
         <input type="text" id="username" name="username" required />
 
@@ -24,6 +25,15 @@
         <div class="extra-options">
           <a href="#">회원가입</a> | <a href="#">비밀번호 찾기</a>
         </div>
+        
+        <div class="extra-options">
+         	<c:if test="${param.msg == 1}">
+         		<p style="color:red;">
+         			아이디 또는 비밀번호가 잘못 되었습니다.
+         		</p>
+         	</c:if>
+        </div>
+        
       </form>
     </div>
   </div>

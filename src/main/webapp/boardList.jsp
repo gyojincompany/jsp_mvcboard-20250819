@@ -13,9 +13,14 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div class="board-container">
+  <div class="board-container">  	
     <div class="board-header">
       <h2>자유게시판</h2>
+      <span style="color:blue;">
+      	<c:if test="${not empty sessionScope.sessionId }">
+      		<b>${sessionScope.sessionId}</b>님 로그인 중
+      	</c:if>
+      </span>
       <a href="write.do" class="write-button">글쓰기</a>
     </div>
     

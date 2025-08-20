@@ -6,11 +6,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.gyojincompany.dao.BoardDao;
+import com.gyojincompany.dao.MemberDao;
 import com.gyojincompany.dto.BoardDto;
 
 @WebServlet("*.do")
@@ -41,6 +44,7 @@ public class BoardController extends HttpServlet {
 		
 		String viewPage = null;
 		BoardDao boardDao = new BoardDao();
+		MemberDao memberDao = new MemberDao();
 		List<BoardDto> bDtos = new ArrayList<BoardDto>();
 		
 		if(comm.equals("/list.do")) { //게시판 모든 글 목록 보기 요청
@@ -102,6 +106,22 @@ public class BoardController extends HttpServlet {
 			return; //프로그램의 진행 멈춤
 		} else if(comm.equals("/login.do")) {
 			viewPage = "login.jsp";
+		} else if(comm.equals("/loginOk.do")) {
+			request.setCharacterEncoding("utf-8");
+			String loginId = request.getParameter("username");
+			String loginPw = request.getParameter("password");
+			
+			int loginFlag = memberDao.loginCheck(loginId, loginPw); 
+			//로그인 성공이면 1, 실패면 0이 반환
+			if(loginFlag == 1) {
+				HttpSession session = request.getSession();
+				session.setAttribute("sessionId", loginId);
+			} else {
+				response.sendRedirect("login.do?msg=1");
+				return;
+			}
+			
+			viewPage = "list.do";
 		} else {
 			viewPage = "index.jsp";
 		}
