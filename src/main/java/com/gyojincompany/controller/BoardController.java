@@ -100,6 +100,8 @@ public class BoardController extends HttpServlet {
 			boardDao.boardWrite(btitle, bcontent, memberid); //새 글이 DB 입력
 			response.sendRedirect("list.do"); //포워딩을 하지 않고 강제로 list.do로 이동
 			return; //프로그램의 진행 멈춤
+		} else if(comm.equals("/login.do")) {
+			viewPage = "login.jsp";
 		} else {
 			viewPage = "index.jsp";
 		}

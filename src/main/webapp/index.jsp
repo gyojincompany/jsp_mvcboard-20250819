@@ -14,6 +14,7 @@
       <h1 class="logo">우리약국</h1>
       <nav class="nav">
         <a href="#">홈</a>
+        <a href="login.do">로그인</a>
         <a href="#">약품안내</a>
         <a href="#">건강정보</a>
         <a href="list.do">자유게시판</a>
