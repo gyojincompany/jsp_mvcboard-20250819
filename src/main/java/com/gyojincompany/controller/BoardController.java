@@ -62,11 +62,21 @@ public class BoardController extends HttpServlet {
 				return; //멈춤
 			}			
 		} else if(comm.equals("/modify.do")) { //글 수정 폼으로 이동
+			session = request.getSession();
+			String sid = (String) session.getAttribute("sessionId");			
+			
 			String bnum = request.getParameter("bnum"); //수정하려고 하는 글의 글번호
 			BoardDto boardDto = boardDao.contentView(bnum); //수정하려고 하는 글 가져오기
 			
-			request.setAttribute("boardDto", boardDto);			
-			viewPage = "modifyForm.jsp";
+			if(boardDto.getMemberid().equals(sid)) { //참이면 수정, 삭제 가능
+				request.setAttribute("boardDto", boardDto);			
+				viewPage = "modifyForm.jsp";
+			} else {
+				response.sendRedirect("modifyForm.jsp?error=1");
+				return;
+			}
+			
+			
 		} else if(comm.equals("/modifyOk.do")) { //글 수정한 후 글 내용 확인 페이지로 이동
 			request.setCharacterEncoding("utf-8");
 			
@@ -85,10 +95,21 @@ public class BoardController extends HttpServlet {
 			viewPage = "contentView.jsp";
 		} else if(comm.equals("/delete.do")) { //글 삭제 후 글 목록으로 이동
 			String bnum = request.getParameter("bnum"); //유저가 삭제할 글의 번호
+			session = request.getSession();
+			String sid = (String) session.getAttribute("sessionId");
 			
-			boardDao.boardDelete(bnum); //해당 글 번호 삭제 메서드 호출
+			BoardDto boardDto = boardDao.contentView(bnum); //수정하려고 하는 글 가져오기
 			
-			viewPage = "list.do";
+			if(boardDto.getMemberid().equals(sid)) { //참이면 수정, 삭제 가능
+				boardDao.boardDelete(bnum); //해당 글 번호 삭제 메서드 호출				
+				viewPage = "list.do";
+			} else {
+				response.sendRedirect("modifyForm.jsp?error=1");
+				return;
+			}
+			
+			
+			
 		} else if(comm.equals("/content.do")) { //글 목록에서 선택된 글 내용이 보여지는 페이지로 이동
 			String bnum = request.getParameter("bnum"); //유저가 선택한 글의 번호
 			

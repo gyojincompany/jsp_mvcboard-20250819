@@ -1,5 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+	if(request.getParameter("error") != null) {
+		out.println("<script>alert('수정 또는 삭제 권한이 없는 글입니다.');history.go(-1);</script>");	
+	}
+%>        
 <!DOCTYPE html>
 <html lang="ko">
 <head>

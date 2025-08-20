@@ -30,7 +30,7 @@
 
       <div class="form-buttons">
         <button type="submit" class="btn btn-primary">등록</button>
-        <a href="index.html" class="btn btn-secondary">취소</a>
+        <a href="list.do" class="btn btn-secondary">취소</a>
       </div>
     </form>
   </div>

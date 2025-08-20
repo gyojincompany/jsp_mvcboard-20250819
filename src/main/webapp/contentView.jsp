@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>    
 <%
 	//if(request.getAttribute("msg") != null) { //웹서블릿에서 넘겨준 값을 뺄때는 getAttribute 사용
 	//	String msginfo = request.getAttribute("msg").toString();		
@@ -36,8 +37,10 @@
     
     <div class="post-buttons">
       <a href="list.do" class="btn btn-secondary">목록으로</a>
+      <c:if test="${sessionScope.sessionId == boardDto.memberid }">
       <a href="modify.do?bnum=${boardDto.bnum }" class="btn btn-primary">수정</a>
       <a href="delete.do?bnum=${boardDto.bnum }" class="btn btn-danger">삭제</a>
+      </c:if>
     </div>
   </div>
 </body>
