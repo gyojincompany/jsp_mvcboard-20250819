@@ -22,16 +22,18 @@ public class BoardDao {
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	
-	public List<BoardDto> boardList() { //게시판 모든 글 리스트를 가져와서 반환하는 메서드
+	public List<BoardDto> boardList(int page) { //게시판 모든 글 리스트를 가져와서 반환하는 메서드
 		//String sql = "SELECT * FROM board ORDER BY bnum DESC";
 		String sql = "SELECT row_number() OVER (order by bnum ASC) AS bno,"
 				+ "b.bnum, b.btitle, b.bcontent, b.memberid, m.memberemail, b.bdate, b.bhit "
 				+ "FROM board b "
 				+ "LEFT JOIN members m ON b.memberid = m.memberid"
-				+ " ORDER BY bno DESC";
+				+ " ORDER BY bno DESC"
+				+ " LIMIT ? OFFSET ?";
 		//members 테이블과 board 테이블의 조인 SQL문
 		//List<BoardMemberDto> bmDtos = new ArrayList<BoardMemberDto>();
 		List<BoardDto> bDtos = new ArrayList<BoardDto>();
+		int offset = (page - 1) * 10;
 		
 		try {
 			Class.forName(driverName); //MySQL 드라이버 클래스 불러오기			
@@ -39,7 +41,8 @@ public class BoardDao {
 			//커넥션이 메모리 생성(DB와 연결 커넥션 conn 생성)
 			
 			pstmt = conn.prepareStatement(sql); //pstmt 객체 생성(sql 삽입)			
-			
+			pstmt.setInt(1, 10);
+			pstmt.setInt(2, offset);
 			rs = pstmt.executeQuery(); //모든 글 리스트(모든 레코드) 반환
 			
 			while(rs.next()) {
@@ -84,17 +87,19 @@ public class BoardDao {
 		return bDtos; //모든 글(bDto) 여러 개가 담긴 list인 bDtos를 반환
 	}
 	
-	public List<BoardDto> searchBoardList(String searchKeyword, String searchType) { //게시판 모든 글 리스트를 가져와서 반환하는 메서드
+	public List<BoardDto> searchBoardList(String searchKeyword, String searchType, int page) { //게시판 모든 글 리스트를 가져와서 반환하는 메서드
 		//String sql = "SELECT * FROM board ORDER BY bnum DESC";
 		String sql = "SELECT row_number() OVER (order by bnum ASC) AS bno,"
 				+ "b.bnum, b.btitle, b.bcontent, b.memberid, m.memberemail, b.bdate, b.bhit "
 				+ "FROM board b "
 				+ "LEFT JOIN members m ON b.memberid = m.memberid"
 				+ " WHERE " + searchType + " LIKE ?"
-				+ " ORDER BY bno DESC";
+				+ " ORDER BY bno DESC"
+				+ " LIMIT ? OFFSET ?";
 		//members 테이블과 board 테이블의 조인 SQL문
 		//List<BoardMemberDto> bmDtos = new ArrayList<BoardMemberDto>();
 		List<BoardDto> bDtos = new ArrayList<BoardDto>();
+		int offset = (page -1) * 10;
 		
 		try {
 			Class.forName(driverName); //MySQL 드라이버 클래스 불러오기			
@@ -103,6 +108,8 @@ public class BoardDao {
 			
 			pstmt = conn.prepareStatement(sql); //pstmt 객체 생성(sql 삽입)			
 			pstmt.setString(1, "%" + searchKeyword + "%");
+			pstmt.setInt(2, 10);
+			pstmt.setInt(3, offset);
 			rs = pstmt.executeQuery(); //모든 글 리스트(모든 레코드) 반환
 			
 			while(rs.next()) {
@@ -183,7 +190,13 @@ public class BoardDao {
 	}
 	
 	public BoardDto contentView(String boardnum) { //게시판 글 목록에서 유저가 클릭한 글 번호의 글 dto 반환 메서드
-		String sql = "SELECT * FROM board WHERE bnum=?";
+		//String sql = "SELECT * FROM board WHERE bnum=?";
+		String sql = "SELECT row_number() OVER (order by bnum ASC) AS bno,"
+				+ "b.bnum, b.btitle, b.bcontent, b.memberid, m.memberemail, b.bdate, b.bhit "
+				+ "FROM board b "
+				+ "LEFT JOIN members m ON b.memberid = m.memberid "
+				+ "WHERE bnum=?";				
+		
 		BoardDto bDto = null;
 		
 		try {
@@ -196,6 +209,7 @@ public class BoardDao {
 			rs = pstmt.executeQuery(); //해당 번호글의 레코드 1개 또는 0개가 반환
 			
 			while(rs.next()) {
+				int bno = rs.getInt("bno");
 				int bnum = rs.getInt("bnum");
 				String btitle = rs.getString("btitle");
 				String bcontent = rs.getString("bcontent");
@@ -203,7 +217,11 @@ public class BoardDao {
 				int bhit = rs.getInt("bhit");
 				String bdate = rs.getString("bdate");
 				
-				bDto = new BoardDto(bnum, btitle, bcontent, memberid, bhit, bdate);
+				String memberemail = rs.getString("memberemail");
+				MemberDto memberDto = new MemberDto();
+				memberDto.setMemberid(memberid); 
+				memberDto.setMemberemail(memberemail); 
+				bDto = new BoardDto(bno, bnum, btitle, bcontent, memberid, bhit, bdate, memberDto);
 			}	
 			
 		} catch (Exception e) {

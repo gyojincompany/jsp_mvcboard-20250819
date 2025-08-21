@@ -50,18 +50,25 @@ public class BoardController extends HttpServlet {
 		List<BoardMemberDto> bmDtos = new ArrayList<BoardMemberDto>();
 		HttpSession session = null;
 		
+		List<BoardDto> countDtos = new ArrayList<BoardDto>();
+		
 		if(comm.equals("/list.do")) { //게시판 모든 글 목록 보기 요청
 			String searchType = request.getParameter("searchType");
 			String searchKeyword = request.getParameter("searchKeyword");
-			
+			int page = Integer.parseInt(request.getParameter("page"));
 			if(searchType != null && searchKeyword != null && !searchKeyword.strip().isEmpty()) { //유저가 검색 결과 리스트를 원하는 경우
-				bDtos = boardDao.searchBoardList(searchKeyword, searchType);
+				bDtos = boardDao.searchBoardList(searchKeyword, searchType, page);				
+				countDtos= boardDao.searchBoardList(searchKeyword, searchType, 1);
+				//1페이지 해당하는 글 목록 가져오기
 			} else { //list.do->모든 게시판 글 리스트를 원하는 경우
-				bDtos = boardDao.boardList(); //게시판 모든 글이 포함된 ArrayList 반환
+				bDtos = boardDao.boardList(page); //게시판 모든 글이 포함된 ArrayList 반환				
+				countDtos= boardDao.boardList(1); //1페이지 해당하는 글 목록 가져오기
 			}
 			
 			System.out.println("searchType : " + searchType);
 			System.out.println("searchkeyword : " + searchKeyword);
+			System.out.println("모든 글의 수 : " + countDtos.get(0).getBno());
+			//1페이지의 첫번째 글의 bno값 가져오기->bno = 모든 글의 수와 동일
 			
 			
 			request.setAttribute("bDtos", bDtos);

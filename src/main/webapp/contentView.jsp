@@ -25,6 +25,7 @@
     
     <div class="post-meta">
       <span>작성자: ${boardDto.memberid }</span> |
+      <span>이메일: ${boardDto.memberDto.memberemail }</span> |
       <span>작성일: ${boardDto.bdate }</span> |
       <span>조회수: ${boardDto.bhit }</span>
     </div>
