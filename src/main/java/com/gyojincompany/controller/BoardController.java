@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gyojincompany.command.BCommand;
+import com.gyojincompany.command.BModifyCommand;
+import com.gyojincompany.command.BWriteCommand;
 import com.gyojincompany.dao.BoardDao;
 import com.gyojincompany.dao.MemberDao;
 import com.gyojincompany.dto.BoardDto;
@@ -52,6 +55,8 @@ public class BoardController extends HttpServlet {
 		List<BoardDto> bDtos = new ArrayList<BoardDto>();
 		List<BoardMemberDto> bmDtos = new ArrayList<BoardMemberDto>();
 		HttpSession session = null;
+		BCommand bCommand = null;
+		
 		
 		//List<BoardDto> countDtos = new ArrayList<BoardDto>();
 		
@@ -140,19 +145,8 @@ public class BoardController extends HttpServlet {
 			}
 			
 		} else if(comm.equals("/modifyOk.do")) { //글 수정한 후 글 내용 확인 페이지로 이동
-			request.setCharacterEncoding("utf-8");
-			
-			String bnum = request.getParameter("bnum"); //유저가 수정하려고 하는 글의 번호
-			String btitle = request.getParameter("title"); //유저가 수정하려고 하는 글 제목
-			String memberid = request.getParameter("author"); //유저가 수정하는 글 작성자
-			String bcontent = request.getParameter("content"); //유저가 수정하려고 하는 글 내용
-			
-			boardDao.boardUpdate(bnum, btitle, bcontent); //글 수정 메서드 호출
-			
-			BoardDto boardDto = boardDao.contentView(bnum); 
-			//수정한 글 번호로 db에서 다시 한번 글 데이터 가져오기
-			
-			request.setAttribute("boardDto", boardDto);
+			bCommand = new BModifyCommand();
+			bCommand.excute(request, response);
 			
 			viewPage = "contentView.jsp";
 		} else if(comm.equals("/delete.do")) { //글 삭제 후 글 목록으로 이동
@@ -171,13 +165,13 @@ public class BoardController extends HttpServlet {
 			}
 			
 		} else if(comm.equals("/content.do")) { //글 목록에서 선택된 글 내용이 보여지는 페이지로 이동
+			
 			String bnum = request.getParameter("bnum"); //유저가 선택한 글의 번호
 			
 			//조회수 올려주는 메서드 호출
 			boardDao.updateBhit(bnum); //조회수 증가
 			
 			BoardDto boardDto = boardDao.contentView(bnum); //boardDto 반환(유저가 선택한 글번호에 해당하는 dto반환)
-			
 			if(boardDto == null) { //해당 글이 존재하지 않음
 				response.sendRedirect("contentView.jsp?msg=1");
 				return;
@@ -187,13 +181,10 @@ public class BoardController extends HttpServlet {
 						
 			viewPage = "contentView.jsp";			
 		} else if(comm.equals("/writeOk.do")) {
-			request.setCharacterEncoding("utf-8");
 			
-			String btitle = request.getParameter("title"); //유저가 입력한 글 제목
-			String memberid = request.getParameter("author"); //유저가 입력한 글 작성자
-			String bcontent = request.getParameter("content"); //유저가 입력한 글 내용
+			bCommand = new BWriteCommand();
+			bCommand.excute(request, response);
 			
-			boardDao.boardWrite(btitle, bcontent, memberid); //새 글이 DB 입력
 			response.sendRedirect("list.do"); //포워딩을 하지 않고 강제로 list.do로 이동
 			return; //프로그램의 진행 멈춤
 		} else if(comm.equals("/login.do")) {
