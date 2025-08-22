@@ -81,6 +81,7 @@ public class BoardController extends HttpServlet {
 			
 			System.out.println("searchType : " + searchType);
 			System.out.println("searchkeyword : " + searchKeyword);
+			
 			System.out.println("모든 글의 수 : " + totalBoardCount);
 			//1페이지의 첫번째 글의 bno값 가져오기->bno = 모든 글의 수와 동일			
 			
