@@ -75,6 +75,8 @@ public class BoardController extends HttpServlet {
 				bDtos = boardDao.searchBoardList(searchKeyword, searchType, page);				
 				//countDtos= boardDao.searchBoardList(searchKeyword, searchType, 1);
 				//1페이지 해당하는 글 목록 가져오기
+				request.setAttribute("searchType", searchType);
+				request.setAttribute("searchKeyword", searchKeyword);
 			} else { //list.do->모든 게시판 글 리스트를 원하는 경우
 				bDtos = boardDao.boardList(1);
 				totalBoardCount = bDtos.get(0).getBno();
