@@ -70,18 +70,23 @@ public class BoardController extends HttpServlet {
 			
 			if(searchType != null && searchKeyword != null && !searchKeyword.strip().isEmpty()) { //유저가 검색 결과 리스트를 원하는 경우
 				bDtos = boardDao.searchBoardList(searchKeyword, searchType, 1);
-				totalBoardCount = bDtos.get(0).getBno();
-				
+				if(!bDtos.isEmpty()) {
+					totalBoardCount = bDtos.get(0).getBno();
+				}
 				bDtos = boardDao.searchBoardList(searchKeyword, searchType, page);				
-				//countDtos= boardDao.searchBoardList(searchKeyword, searchType, 1);
+				
 				//1페이지 해당하는 글 목록 가져오기
+				
 				request.setAttribute("searchType", searchType);
 				request.setAttribute("searchKeyword", searchKeyword);
 			} else { //list.do->모든 게시판 글 리스트를 원하는 경우
 				bDtos = boardDao.boardList(1);
-				totalBoardCount = bDtos.get(0).getBno();
+				if(!bDtos.isEmpty()) {
+					totalBoardCount = bDtos.get(0).getBno();
+				}	
 				bDtos = boardDao.boardList(page); //게시판 모든 글이 포함된 ArrayList 반환				
-				//countDtos= boardDao.boardList(1); //1페이지 해당하는 글 목록 가져오기
+				
+				
 			}
 			
 			int totalPage = (int) Math.ceil((double) totalBoardCount / 10);
