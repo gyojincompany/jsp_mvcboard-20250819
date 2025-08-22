@@ -20,6 +20,9 @@ import com.gyojincompany.dto.BoardMemberDto;
 @WebServlet("*.do")
 public class BoardController extends HttpServlet {
 	
+	public static final int PAGE_GROUP_SIZE = 10;
+	
+	
     public BoardController() {
         super();
         // TODO Auto-generated constructor stub
@@ -79,6 +82,19 @@ public class BoardController extends HttpServlet {
 				//countDtos= boardDao.boardList(1); //1페이지 해당하는 글 목록 가져오기
 			}
 			
+			int totalPage = (int) Math.ceil((double) totalBoardCount / 10);
+            //모든 글의 갯수 137->14, 437->44	
+			int startPage = (((page -1) / PAGE_GROUP_SIZE) * PAGE_GROUP_SIZE) + 1;
+			int endPage = startPage + (PAGE_GROUP_SIZE - 1);
+			
+			//마지막 페이지 그룹의 경우에는 실제 마지막 페이지로 표시
+			//글의 갯수 437->44페이지, 마지막 페이지 그룹의 실제 endPage->44 변경
+			if(endPage > totalPage) {
+				endPage = totalPage;
+				//totalPage->실제 마지막 페이지값(437->44)
+			}
+			
+			
 			System.out.println("searchType : " + searchType);
 			System.out.println("searchkeyword : " + searchKeyword);
 			
@@ -87,7 +103,9 @@ public class BoardController extends HttpServlet {
 			
 			request.setAttribute("bDtos", bDtos);
 			request.setAttribute("currentPage", page); //유저가 현재 선택한 페이지 번호
-			
+			request.setAttribute("totalPage", totalPage); //전체 글 갯수로 계산한 전체 페이지 수
+			request.setAttribute("startPage", startPage); //페이지 그룹 출력시 첫번째 페이지 번호
+			request.setAttribute("endPage", endPage); //페이지 그룹 출력시 마지막 페이지 번호
 			
 			viewPage = "boardList.jsp";
 		} else if(comm.equals("/write.do")) { //글 쓰기 폼으로 이동

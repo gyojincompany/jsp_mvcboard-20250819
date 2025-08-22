@@ -66,6 +66,37 @@
         <!-- 추가 게시글 -->
       </tbody>
     </table>
+    <br>
+    <!-- 1 페이지로 이동 화살표  -->
+    <c:if test="${currentPage > 1}">
+    <a href="list.do?page=1"> ◀◀ </a>
+    </c:if>
+    <!-- 이전 페이지 그룹으로 이동 화살표  -->
+    <c:if test="${startPage > 1 }">
+    <a href="list.do?page=${startPage-1}"> ◀ </a>
+    </c:if>
+    <!-- 페이지 번호 그룹 출력 -->
+    <span>
+	    <c:forEach begin="${startPage }" end="${endPage }" var="i">
+	    	<c:choose>
+	    		<c:when test="${i == currentPage }">
+	    			<span><a href="list.do?page=${i}"> <b style="color:red;">[${i}]</b> </a></span>
+	    		</c:when>
+	    		<c:otherwise>
+	    			<span><a href="list.do?page=${i}"> [${i}] </a></span>
+	    		</c:otherwise>
+	    	</c:choose>
+	    </c:forEach>
+    </span>
+    
+    <!-- 다음 페이지 그룹으로 이동 화살표  -->
+    <c:if test="${endPage < totalPage }">
+    <a href="list.do?page=${endPage + 1 }"> ▶ </a>
+    </c:if>
+    <!-- 마지막 페이지로 이동 화살표  -->
+    <c:if test="${currentPage < totalPage }">
+    <a href="list.do?page=${totalPage}"> ▶▶ </a>
+    </c:if>
   </div>
 </body>
 </html>
