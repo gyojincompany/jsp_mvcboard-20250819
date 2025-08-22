@@ -50,28 +50,44 @@ public class BoardController extends HttpServlet {
 		List<BoardMemberDto> bmDtos = new ArrayList<BoardMemberDto>();
 		HttpSession session = null;
 		
-		List<BoardDto> countDtos = new ArrayList<BoardDto>();
+		//List<BoardDto> countDtos = new ArrayList<BoardDto>();
 		
 		if(comm.equals("/list.do")) { //게시판 모든 글 목록 보기 요청
 			String searchType = request.getParameter("searchType");
 			String searchKeyword = request.getParameter("searchKeyword");
-			int page = Integer.parseInt(request.getParameter("page"));
+			int page = 1;
+			int totalBoardCount = 0; //모든 글의 갯수가 저장될 변수 
+			
+			if(request.getParameter("page") == null) { //참이면 링크타고 게시판으로 들어온 경우
+				page = 1; //링크(메뉴)타고 게시판으로 들어온 경우 무조건 첫 페이지를 보여주게됨
+			} else { //유저가 보고 싶은 페이지 번호를 클릭한 경우
+				page = Integer.parseInt(request.getParameter("page"));
+				//유저가 클릭한 유저가 보고 싶어하는 페이지의 번호
+			}
+			
 			if(searchType != null && searchKeyword != null && !searchKeyword.strip().isEmpty()) { //유저가 검색 결과 리스트를 원하는 경우
+				bDtos = boardDao.searchBoardList(searchKeyword, searchType, 1);
+				totalBoardCount = bDtos.get(0).getBno();
+				
 				bDtos = boardDao.searchBoardList(searchKeyword, searchType, page);				
-				countDtos= boardDao.searchBoardList(searchKeyword, searchType, 1);
+				//countDtos= boardDao.searchBoardList(searchKeyword, searchType, 1);
 				//1페이지 해당하는 글 목록 가져오기
 			} else { //list.do->모든 게시판 글 리스트를 원하는 경우
+				bDtos = boardDao.boardList(1);
+				totalBoardCount = bDtos.get(0).getBno();
 				bDtos = boardDao.boardList(page); //게시판 모든 글이 포함된 ArrayList 반환				
-				countDtos= boardDao.boardList(1); //1페이지 해당하는 글 목록 가져오기
+				//countDtos= boardDao.boardList(1); //1페이지 해당하는 글 목록 가져오기
 			}
 			
 			System.out.println("searchType : " + searchType);
 			System.out.println("searchkeyword : " + searchKeyword);
-			System.out.println("모든 글의 수 : " + countDtos.get(0).getBno());
-			//1페이지의 첫번째 글의 bno값 가져오기->bno = 모든 글의 수와 동일
-			
+			System.out.println("모든 글의 수 : " + totalBoardCount);
+			//1페이지의 첫번째 글의 bno값 가져오기->bno = 모든 글의 수와 동일			
 			
 			request.setAttribute("bDtos", bDtos);
+			request.setAttribute("currentPage", page); //유저가 현재 선택한 페이지 번호
+			
+			
 			viewPage = "boardList.jsp";
 		} else if(comm.equals("/write.do")) { //글 쓰기 폼으로 이동
 			session = request.getSession();

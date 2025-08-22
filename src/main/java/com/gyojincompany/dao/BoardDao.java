@@ -22,6 +22,9 @@ public class BoardDao {
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	
+	public static final int PAGE_SIZE = 10;
+	
+	//모든 글 가져오기용 메서드
 	public List<BoardDto> boardList(int page) { //게시판 모든 글 리스트를 가져와서 반환하는 메서드
 		//String sql = "SELECT * FROM board ORDER BY bnum DESC";
 		String sql = "SELECT row_number() OVER (order by bnum ASC) AS bno,"
@@ -33,7 +36,8 @@ public class BoardDao {
 		//members 테이블과 board 테이블의 조인 SQL문
 		//List<BoardMemberDto> bmDtos = new ArrayList<BoardMemberDto>();
 		List<BoardDto> bDtos = new ArrayList<BoardDto>();
-		int offset = (page - 1) * 10;
+		
+		int offset = (page - 1) * PAGE_SIZE;
 		
 		try {
 			Class.forName(driverName); //MySQL 드라이버 클래스 불러오기			
@@ -41,8 +45,8 @@ public class BoardDao {
 			//커넥션이 메모리 생성(DB와 연결 커넥션 conn 생성)
 			
 			pstmt = conn.prepareStatement(sql); //pstmt 객체 생성(sql 삽입)			
-			pstmt.setInt(1, 10);
-			pstmt.setInt(2, offset);
+			pstmt.setInt(1, PAGE_SIZE); //limit 10으로 고정
+			pstmt.setInt(2, offset); //0 10 20 ...
 			rs = pstmt.executeQuery(); //모든 글 리스트(모든 레코드) 반환
 			
 			while(rs.next()) {
@@ -87,6 +91,7 @@ public class BoardDao {
 		return bDtos; //모든 글(bDto) 여러 개가 담긴 list인 bDtos를 반환
 	}
 	
+	//게시판 검색용 메서드
 	public List<BoardDto> searchBoardList(String searchKeyword, String searchType, int page) { //게시판 모든 글 리스트를 가져와서 반환하는 메서드
 		//String sql = "SELECT * FROM board ORDER BY bnum DESC";
 		String sql = "SELECT row_number() OVER (order by bnum ASC) AS bno,"
@@ -99,7 +104,7 @@ public class BoardDao {
 		//members 테이블과 board 테이블의 조인 SQL문
 		//List<BoardMemberDto> bmDtos = new ArrayList<BoardMemberDto>();
 		List<BoardDto> bDtos = new ArrayList<BoardDto>();
-		int offset = (page -1) * 10;
+		int offset = (page -1) * PAGE_SIZE;
 		
 		try {
 			Class.forName(driverName); //MySQL 드라이버 클래스 불러오기			
@@ -108,7 +113,7 @@ public class BoardDao {
 			
 			pstmt = conn.prepareStatement(sql); //pstmt 객체 생성(sql 삽입)			
 			pstmt.setString(1, "%" + searchKeyword + "%");
-			pstmt.setInt(2, 10);
+			pstmt.setInt(2, PAGE_SIZE);
 			pstmt.setInt(3, offset);
 			rs = pstmt.executeQuery(); //모든 글 리스트(모든 레코드) 반환
 			
