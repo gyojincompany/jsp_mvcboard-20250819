@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+	<%@ include file="include/header.jsp" %>
+	
   <div class="board-container">  	
     <div class="board-header">
       <h2>자유게시판</h2>
@@ -98,6 +100,7 @@
     <a href="list.do?page=${totalPage}&searchType=${searchType}&searchKeyword=${searchKeyword}"> ▶▶ </a>
     </c:if>
   </div>
+  <%@ include file="include/footer.jsp" %>
 </body>
 </html>
 

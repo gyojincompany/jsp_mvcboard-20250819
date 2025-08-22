@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="css/style2.css" />
 </head>
 <body>
+	<%@ include file="include/header.jsp" %>
   <div class="login-container">
     <div class="login-box">
       <h2>💊 약국 회원 로그인</h2>
@@ -42,5 +43,6 @@
       </form>
     </div>
   </div>
+  <%@ include file="include/footer.jsp" %>
 </body>
 </html>

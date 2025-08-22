@@ -204,7 +204,10 @@ public class BoardController extends HttpServlet {
 				return;
 			}
 			
-			viewPage = "list.do";
+			viewPage = "list.do";			
+			
+		} else if(comm.equals("/index.do")) { //대문(웹의 첫 페이지)
+			viewPage = "index.jsp";
 		} else {
 			viewPage = "index.jsp";
 		}

@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+	<%@ include file="include/header.jsp" %>
+
   <div class="board-container">
     <h2>${boardDto.btitle }</h2>
     
@@ -44,5 +46,6 @@
       </c:if>
     </div>
   </div>
+  <%@ include file="include/footer.jsp" %>
 </body>
 </html>

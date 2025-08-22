@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+	<%@ include file="include/header.jsp" %>
   <div class="board-container">
     <h2>게시글 수정</h2>
 
@@ -40,5 +41,6 @@
       </div>
     </form>
   </div>
+  <%@ include file="include/footer.jsp" %>
 </body>
 </html>

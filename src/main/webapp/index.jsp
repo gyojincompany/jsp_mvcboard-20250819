@@ -9,19 +9,7 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header class="header">
-    <div class="container">
-      <h1 class="logo">우리약국</h1>
-      <nav class="nav">
-        <a href="#">홈</a>
-        <a href="login.do">로그인</a>
-        <a href="#">약품안내</a>
-        <a href="#">건강정보</a>
-        <a href="list.do">자유게시판</a>
-        <a href="#">문의하기</a>
-      </nav>
-    </div>
-  </header>
+  <%@ include file="include/header.jsp" %>
 
   <section class="hero">
     <div class="container">
@@ -47,11 +35,7 @@
     <!-- 필요에 따라 컨텐츠 추가 가능 -->
   </section>
 
-  <footer class="footer">
-    <div class="container">
-      <p>© 2025 우리약국. All rights reserved.</p>
-    </div>
-  </footer>
+    <%@ include file="include/footer.jsp" %>
 </body>
 </html>
 
