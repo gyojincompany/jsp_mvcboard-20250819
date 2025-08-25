@@ -9,7 +9,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import com.gyojincompany.command.BCommand;
@@ -17,9 +21,11 @@ import com.gyojincompany.command.BModifyCommand;
 import com.gyojincompany.command.BWriteCommand;
 import com.gyojincompany.dao.BoardDao;
 import com.gyojincompany.dao.MemberDao;
+import com.gyojincompany.dao.ReservationDao;
 import com.gyojincompany.dto.BoardDto;
 import com.gyojincompany.dto.BoardMemberDto;
 import com.gyojincompany.dto.CommentDto;
+import com.gyojincompany.dto.ReservationDto;
 
 @WebServlet("*.do")
 public class BoardController extends HttpServlet {
@@ -53,8 +59,11 @@ public class BoardController extends HttpServlet {
 		String viewPage = null;
 		BoardDao boardDao = new BoardDao();
 		MemberDao memberDao = new MemberDao();
+		ReservationDao reservationDao = new ReservationDao();
 		List<BoardDto> bDtos = new ArrayList<BoardDto>();
 		List<BoardMemberDto> bmDtos = new ArrayList<BoardMemberDto>();
+		List<ReservationDto> rDto = new ArrayList<ReservationDto>();
+		List<Date> rDates = new ArrayList<Date>();
 		HttpSession session = null;
 		BCommand bCommand = null;
 		
@@ -225,7 +234,34 @@ public class BoardController extends HttpServlet {
 			
 			response.sendRedirect("content.do?bnum="+bnum);
 			return;
-			//viewPage = "content.do";	
+			//viewPage = "content.do";			
+		} else if(comm.equals("/reservationList.do")) { //예약 리스트 보기
+			LocalDate today = LocalDate.now(); //오늘 날짜
+			
+			rDates = reservationDao.dayCheck("tiger");
+			
+			System.out.println("오늘날짜 : " + today);
+			for(Date rDate : rDates) {
+				// Date 형식을 LocalDate 형식으로 변환하는 방법
+				Calendar cal = Calendar.getInstance();
+		        cal.setTime(rDate);
+
+		        int year = cal.get(Calendar.YEAR);
+		        int month = cal.get(Calendar.MONTH) + 1; // 0 ~ 11 → +1
+		        int day = cal.get(Calendar.DAY_OF_MONTH);
+		        
+		        LocalDate reservationDate = LocalDate.of(year, month, day);				
+		        System.out.println("예약 날짜 : "+ reservationDate);
+				if(reservationDate.isBefore(today)) {
+					System.out.println("지난 예약 날짜 : "+ rDate);					
+				} else {
+					System.out.println("남은 예약 날짜 : "+ rDate);
+				}
+								
+			}
+			
+			
+			viewPage = "reservationList.jsp";			
 		} else {
 			viewPage = "index.jsp";
 		}

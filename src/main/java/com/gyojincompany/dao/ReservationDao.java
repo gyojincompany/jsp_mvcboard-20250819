@@ -1,14 +1,14 @@
 package com.gyojincompany.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.gyojincompany.dto.BoardDto;
-
-public class MemberDao {
-	
+public class ReservationDao {
 	private String driverName = "com.mysql.jdbc.Driver"; //MySQL JDBC 드라이버 이름
 	private String url = "jdbc:mysql://localhost:3306/jspdb"; //MySQL이 설치된 서버의 주소(ip)와 연결할 DB(스키마) 이름		
 	private String username = "root";
@@ -18,9 +18,10 @@ public class MemberDao {
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	
-	public int loginCheck(String mid, String mpw) { //로그인 성공 여부를 반환하는 메서드
-		String sql = "SELECT * FROM members WHERE memberid=? AND memberpw=?";
-		int sqlResult = 0;
+	public List<Date> dayCheck(String mid) { //로그인 성공 여부를 반환하는 메서드
+		String sql = "SELECT * FROM reservation WHERE memberid=?";		
+		Date rdate = null;
+		List<Date> rdates = new ArrayList<Date>();
 		
 		try {
 			Class.forName(driverName); //MySQL 드라이버 클래스 불러오기			
@@ -28,15 +29,16 @@ public class MemberDao {
 			//커넥션이 메모리 생성(DB와 연결 커넥션 conn 생성)
 			
 			pstmt = conn.prepareStatement(sql); //pstmt 객체 생성(sql 삽입)			
-			pstmt.setString(1, mid);
-			pstmt.setString(2, mpw);
+			pstmt.setString(1, mid);			
 			rs = pstmt.executeQuery(); //아이디와 비번이 일치하는 레코드 1개 또는 0개가 반환
 			
-			if(rs.next()) { //참이면 로그인 성공				
-				sqlResult = 1;
-			} else { //거짓이면 로그인 실패
-				sqlResult = 0;
-			}
+			
+			
+			while(rs.next()) { //참이면 로그인 성공				
+				rdate = rs.getDate("rdate");
+				
+				rdates.add(rdate);
+			} 
 			
 		} catch (Exception e) {
 			System.out.println("DB 에러 발생! 게시판 글 가져오기 실패!");
@@ -57,8 +59,6 @@ public class MemberDao {
 			}
 		}
 		
-		return sqlResult; //로그인 성공->1, 로그인 실패->0
+		return rdates; //예약날짜들이 들어있는 리스트
 	}
-	
-	
 }
