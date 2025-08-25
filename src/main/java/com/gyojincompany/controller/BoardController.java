@@ -19,6 +19,7 @@ import com.gyojincompany.dao.BoardDao;
 import com.gyojincompany.dao.MemberDao;
 import com.gyojincompany.dto.BoardDto;
 import com.gyojincompany.dto.BoardMemberDto;
+import com.gyojincompany.dto.CommentDto;
 
 @WebServlet("*.do")
 public class BoardController extends HttpServlet {
@@ -175,7 +176,10 @@ public class BoardController extends HttpServlet {
 			if(boardDto == null) { //해당 글이 존재하지 않음
 				response.sendRedirect("contentView.jsp?msg=1");
 				return;
-			} 
+			}
+			List<CommentDto> commentDtos = boardDao.commentList(bnum);
+			
+			request.setAttribute("commentDtos", commentDtos);
 			
 			request.setAttribute("boardDto", boardDto);
 						
@@ -208,6 +212,20 @@ public class BoardController extends HttpServlet {
 			
 		} else if(comm.equals("/index.do")) { //대문(웹의 첫 페이지)
 			viewPage = "index.jsp";
+		} else if(comm.equals("/commentOk.do")) { //댓글 등록요청
+			request.setCharacterEncoding("utf-8");
+			
+			String bnum = request.getParameter("bnum"); //원글
+			String comment = request.getParameter("comment"); //댓글
+			
+			session = request.getSession();
+			String commentId = (String) session.getAttribute("sessionId"); //현재 로그인되어 있는 아이디(댓글 쓴 아이디)
+			System.out.println(commentId);
+			boardDao.commentWrite(bnum, commentId, comment); //댓글 쓰기 실행
+			
+			response.sendRedirect("content.do?bnum="+bnum);
+			return;
+			//viewPage = "content.do";	
 		} else {
 			viewPage = "index.jsp";
 		}
